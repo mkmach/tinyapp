@@ -28,6 +28,17 @@ app.post("/urls", (req, res) => {
   res.send("Ok"); // Respond with 'Ok' (we will replace this)
 });
 
+function generateRandomString() {
+  const randString = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let results = ''
+  for (let i = 0; i < 6; i++) {
+    results += randString[Math.floor(Math.random() * randString.length)]
+  }
+  return results
+}
+console.log(generateRandomString())
+
+
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
