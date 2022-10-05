@@ -1,18 +1,21 @@
 const express = require("express");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
+
 const app = express();
 const PORT = 8080; // default port 8080
 
 app.use(morgan("dev"));
+app.use(cookieParser());
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true}));
-
-
+app.use(express.urlencoded({ extended: false})); //body parser
 
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+
 
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
@@ -46,6 +49,13 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${newKey}`) 
 });
 
+app.post("/urls/:id/delete", (req, res) => {
+  console.log("inside this route")
+  const id = req.params.id
+  delete urlDatabase[id]
+  res.redirect("/urls")
+})
+
 app.get("/u/:id", (req, res) => {
   // console.log("it's working")
   const shortURL = req.params.id;
@@ -61,10 +71,6 @@ app.get("/u/:id", (req, res) => {
     res.send("no short URL")
   }
 });
-
-
-
-
 
 app.get("/", (req, res) => {
   res.send("Hello!");
