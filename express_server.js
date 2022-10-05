@@ -47,15 +47,15 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/u/:id", (req, res) => {
-  console.log("it's working")
+  // console.log("it's working")
   const shortURL = req.params.id;
-  console.log("urlDatabase", urlDatabase)
-  console.log("shortURL", shortURL)
-  console.log("req.params", req.params)
-  console.log("req.params.shortURL", req.params.id)
+  // console.log("urlDatabase", urlDatabase)
+  // console.log("shortURL", shortURL)
+  // console.log("req.params", req.params)
+  // console.log("req.params.shortURL", req.params.id)
   if (shortURL) {
     let longURL = urlDatabase[shortURL]
-    console.log("urlDatabase[shortURL]", urlDatabase[shortURL])
+    // console.log("urlDatabase[shortURL]", urlDatabase[shortURL])
     res.redirect(longURL);
   } else {
     res.send("no short URL")
