@@ -29,8 +29,17 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: 'http://www.lighthouselabs.ca' };
+  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
+});
+
+app.get("/u/:id:", (req, res) => {
+  const shortURL = req.params.shortURL;
+  if (urlDatabase[shortURL]) {
+    let longURL = urlDatabase[shortURL].longURL;
+    res.redirect(longURL);
+    return;
+  }
 });
 
 app.get("/", (req, res) => {
@@ -49,6 +58,10 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+app.get("/hello", (req, res) => {
+  const templateVars = { greeting: "Hello World!" };
+  res.render("hello_world", templateVars);
+});
 app.get("/set", (req, res) => {
   const a = 1;
   res.send(`a = ${a}`);
