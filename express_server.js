@@ -23,11 +23,6 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.post("/urls", (req, res) => {
-  console.log(req.body); // Log the POST request body to the console
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
-});
-
 function generateRandomString() {
   const randString = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
   let results = ''
@@ -36,22 +31,40 @@ function generateRandomString() {
   }
   return results
 }
-console.log(generateRandomString())
-
 
 app.get("/urls/:id", (req, res) => {
   const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
 });
 
-app.get("/u/:id:", (req, res) => {
-  const shortURL = req.params.shortURL;
-  if (urlDatabase[shortURL]) {
-    let longURL = urlDatabase[shortURL].longURL;
+// create a short URL after user inputs a long URL
+app.post("/urls", (req, res) => {
+  console.log(req.body); // Log the POST request body to the console
+  let newKey = generateRandomString()
+  // res.send(newKey);
+  urlDatabase[newKey] = req.body.longURL
+  res.redirect(`/urls/${newKey}`) 
+});
+
+app.get("/u/:id", (req, res) => {
+  console.log("it's working")
+  const shortURL = req.params.id;
+  console.log("urlDatabase", urlDatabase)
+  console.log("shortURL", shortURL)
+  console.log("req.params", req.params)
+  console.log("req.params.shortURL", req.params.id)
+  if (shortURL) {
+    let longURL = urlDatabase[shortURL]
+    console.log("urlDatabase[shortURL]", urlDatabase[shortURL])
     res.redirect(longURL);
-    return;
+  } else {
+    res.send("no short URL")
   }
 });
+
+
+
+
 
 app.get("/", (req, res) => {
   res.send("Hello!");
