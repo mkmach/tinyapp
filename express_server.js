@@ -50,11 +50,17 @@ app.post("/urls", (req, res) => {
 });
 
 app.post("/urls/:id/delete", (req, res) => {
-  console.log("inside this route")
   const id = req.params.id
   delete urlDatabase[id]
   res.redirect("/urls")
 })
+
+app.post("/urls/:id", (req, res) => {
+  const id = req.params.id
+  const longURL = urlDatabase[id];
+  urlDatabase[id] = req.body.longURL
+  res.redirect("/urls")}
+)
 
 app.get("/u/:id", (req, res) => {
   // console.log("it's working")
