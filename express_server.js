@@ -10,12 +10,24 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false})); //body parser
 
+
+
 const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
+// GET /login
+app.get('/login', (req, res) => {
+  res.render('login');
+})
 
+// POST /login
+app.post ('login', (req, res) => {
+  res.cookie('userID', user.id)
+
+  res.redirect('/login ')
+})
 
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
@@ -35,10 +47,6 @@ function generateRandomString() {
   return results
 }
 
-app.get("/urls/:id", (req, res) => {
-  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
-  res.render("urls_show", templateVars);
-});
 
 // create a short URL after user inputs a long URL
 app.post("/urls", (req, res) => {
@@ -49,18 +57,30 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${newKey}`) 
 });
 
+//RENDERS THE URL FORM PAGE FOR USERS TO EDIT 
+app.get("/urls/:id", (req, res) => {
+  const templateVars = { id: req.params.id, longURL: urlDatabase[req.params.id] };
+  res.render("urls_show", templateVars);
+});
+
 app.post("/urls/:id/delete", (req, res) => {
   const id = req.params.id
   delete urlDatabase[id]
   res.redirect("/urls")
 })
 
+//updates Long Url when user input submits edit
 app.post("/urls/:id", (req, res) => {
   const id = req.params.id
-  const longURL = urlDatabase[id];
   urlDatabase[id] = req.body.longURL
   res.redirect("/urls")}
 )
+
+app.get('/', function (req, res) {
+  // Cookies that have not been signed
+  console.log('Cookies: ', req.cookies)
+})
+
 
 app.get("/u/:id", (req, res) => {
   // console.log("it's working")
